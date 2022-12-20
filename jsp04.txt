@@ -1,0 +1,199 @@
+jsp 04
+
+1. JDBC : java database connectiyity
+
+	자바/ JSP 에서 데이터 베이스 프로그래밍을 할때 JDBC API를 사용한다. 
+	자바를 이용해서 DB 연결하는것. 
+	관계형 데이터 베이스 시스템에 접근하여 SQL문을 실행하기 위한 API로,
+	DBMS 의 종류에 상관없이 동일한 방법으로 데이터베이스 작업을 처리할 수 있다.
+	DBMS에 알맞는 JDBC 드라이버가 필요하며, 각 DBMS는 자신에게 맞는 JDBC
+	드라이버를 제공하고 있다.
+
+	자바 어플리케이션 -> JDBC API ---> 오라클 드라이버 <---> 오라클 데이터베이스
+				    --> MSSQL 드라이버  <--->MSSQL 데이터 베이스
+				    --> MySQL 드라이버  <--->MySQL 데이터 베이스
+
+톱니바퀴 네트워크 및 인터넷> 이더넷 속성
+	1)드라이버 준비
+		*오라클 공식사이트 > JDBC 드라이버
+		https://www.oracle.com/kr/database/technologies/appdev/jdbc-downloads.html
+
+		*메이븐 리포지토리 (라이브러리 모아둔 사이트 )
+		mvnrepository > ojdbc8 >첫번쨰꺼 클릭 > 19.3x 의 jar버튼눌러 다운
+
+	2) 드라이버 배치 
+		lib 에 압축풀지말고 넣기
+		다운받은 ojdbc8.jar 파일 (압축해제하지 않은 상태)을 
+		WEB_INF > lib 폴더안에 복사해 넣기
+		확인 : 프로젝트 폴더 우클릭 > properties >왼쪽 javabuildpath 메뉴 선택
+			> libraries 탭 > class path 안에 ojdbc.jar 가 있는지 확인
+	
+	3) JDBC로 JSP 와 데이터베이스 연동
+		1 : JDBC 드라이버 로딩
+		2 : DB접속을 위한 Connection 객체생성
+		3 : 쿼리 실행을 위한 Statement 객체 생성, 쿼리문 작성
+		4 : 쿼리 실행 
+		5 : 가져오는 결과물이 있으면 사용
+		6 : 사용된 객체 (ResultSet , Statement, Connection 등 ) 종료
+
+	4) JDBC 드라이버 로딩과 사용
+		JDBC API 는 java.sql 패키징 의해 구현된다.
+
+		* java.sql.DriverManager 클래스의 getConnection() 메서드를 사용하여 
+			java.sql.Connection 객체를 얻어옴.
+
+			Connection getConnection(String jdbcURL, String user, String password)
+
+			-jdbcURL : 데이터 베이스 식별을 위한 jdbc url 로 
+				오라클에서 제공하는 JDBC 드라이버는 아래와 같은 형식으로 사용함.
+				jdbc:oracle:thin@ip : port : sid
+					ip = 오라클 DB 설치된 DB 서버의 ip 주소
+					port = 1521 : 오라클에서 디폴트로 세팅해놓은 port 번호
+					sid = service id 로 db 설치시 자동 지정
+
+		* 쿼리문 실행을 위한 Statement 객체 생성
+			
+			-쿼리 실행 객체 3가지
+			Statement		: 정적 쿼리에 적용. 하나의 쿼리 실행후 바로 close 로 해제 필요.
+			PreparedStatement	: 동적 쿼리에 적용. Statement 의 단점을 보완. 하나의 객체로 
+							여러번 쿼리 실행할 수 있음.
+			CallableStatement		: 사용안함. (함수 실행방식으로 사용됨)	
+			
+		
+
+		* PreparedStatement 객체로 쿼리 실행
+			-메서드
+			ResulstSet 	executeQuery()	: SELECT 문 실행할때 사용
+			int		executeUpdate()	: INSERT, UPDATE, DELET 문 실행할때 사용
+			void		close()		: PreparedStatement 객체 반환 . 자원해제
+
+		* 쿼리 실행 후 돌려받은 결과물 추출/ 사용
+
+			커넥션 pool 사용할때 쓰는것들
+			executeQuery() 메서드를 통해 SELECT 문 실행시,
+			ResultSet 타입으로 결과물을 돌려준다.
+			레코드 값을 테이블 형태로 가진 객체로 반환되어
+			레코드 단위로 결과를 추출하여 활용한다.
+			
+			- ResultSet 메서드
+			boolean		next()			: 다음행에 값이 존재하면 true 리턴하며,
+								커서를 다음행으로 이동.
+			Xxx		getXxx(int columnIndex)
+								: 컬럼 인덱스(1~)번호를 주면서 하나의 컬럼에 저장된 값 추출
+								Xxx : String , Int , Array , Timestamp(임포트할때 sql 로 임포트해야함 중요!!!!)
+								 등등 다양한 타입 존재
+			Xxx		getXxx(String columnName)
+								: db 테이블의 컬럼명을 주면서 하나의 값 추출
+			void		close()			: rs 해제
+
+
+
+2.연결 지향성, 비연결 지향성
+	연결 지향성
+	비연결 지향성
+
+	1) 커넥션 퓰 Connection pool
+		: 앞서 DB 작업이 필요할때 커넥션을 생성해서 사용함.
+		-> JSP 페이지 실행할때마다 커넥션 생성하고 닫는데 시간소모가 되어
+		동시접속자가 많은 웹사이트는 전체성능저하, 동시접속자수를 벗어나면 
+		에러 발생하는등 불편함이 있다.
+		이를 해결하기 위한 방법이 커넥션 풀 기법을 사용하는 것이다.
+
+		데이터베이스와 연결된 커넥션을 미리 만들어 풀(POOL)에 저장해두고
+		필요할때 커넥션을 풀에서 가져다 쓰고 다시 반환하는 기법을 말함.
+
+
+		2) 준비사항
+			- ojdbc8.jar (오라클 db 연결시 필요한 라이브러리, lib 폴더에 배치)
+			- tomcat-dbcp.jar (커넥션 풀에 필요한 라이브러리, 이미 톰캣에 들어있음)
+			- context.xml 커넥션에 필요한 resource 기술
+			- DAO (Data Access Object) : DB 관련 처리를 전담하는 클래스(우리가 직접작성)
+
+			* 자바빈즈
+			DTO / VO : Data Transfer Object /Value Object 
+			
+			DAO: Data Access Object : DB 와 관련
+
+			** server >> context.xml 맨 밑에 태그만들기
+
+		 	<Resource
+			name="jdbc/orcl"
+		    	auth="Container"
+		    	type="javax.sql.DataSource"
+		    	driverClassName="oracle.jdbc.driver.OracleDriver"
+		    	username="java14"
+		    	password="java14"
+    			loginTimeout="10"
+    			maxWait="5000"	//기다리는 초 5초
+		    	maxActive="20" //동시접속자
+		    	testOnBorrow="true"
+		    	url="jdbc:oracle:thin:@192.168.100.250.1521:ORCL"
+			    />
+    			<Resource 
+     			  name="jdbc/orcl" 
+     			  auth="Container" 
+     			  type="javax.sql.DataSource" 
+      			 driverClassName="oracle.jdbc.driver.OracleDriver"
+    			   username="gangsa" 
+    			   password="1234"
+     			  loginTimeout="10" 
+    			   maxWait="5000" 
+   			    maxActive="20"
+    			   testOnBorrow="true" 
+     			  url="jdbc:oracle:thin:@192.168.100.250:1521:ORCL" 
+
+
+		3) DAO 
+			데이터베이스에 접속해서 데이터 추가, 삭제, 수정등의 작업을 위해
+			사용하는 클래스.
+
+`			DB 커넥션 관련 메서드, DB에서 처리하는 insert, select, update, delete 등의
+			쿼리를 실행해주는 메서드 등을 각 상황에 맞게 작성해두고 사용.
+
+			context 가져오고 싶으면 임포트 해야함
+
+
+			get set 쉽게 만들기
+			우클릭 > source > generate get set
+
+
+
+
+DB 설치
+관리자 계정 : system
+비밀번호 : 설치시 지정한 번호
+
+사용자 계정 하나 만들기 (system으로 로그인한 상태에서 생성)
+-- 계정생성시 계정명앞에 ## 붙히는거 안하기위한 설정명령문
+alter session set "_ORACLE_SCRIPT"=true; (한번실행)
+
+--계정생성
+create user 계정명 identified by 비밀번호;
+--권한 부여
+grant 권한명, 권한명, ... to 사용자계정명;
+ex) grant connect, resource, dba to java14;
+
+--확인 : 새로만든 사용자계정으로 로그인해서 테이블 생성까지 해보기.
+-- 테이블 생성시 ORA-01950 테이블 스페이스... 이런오류 발생시,
+-- 테이블 스페이스 권한주기 명령실행
+alter user 사용자계정명 default tablespace users quota unlimited on users;
+
+
+개발패턴 
+MVC 패턴 
+	model		: 비지니스 로직처리(dao)
+	view 		: 화면에 보여주기 html, css , js
+	controller	: model 과 view를 전체적으로 제어해주는
+
+
+
+
+[실습]
+1. 연습용 츠로젝트에 똑같이 처음부터 만들어보기
+
+		- DB테이블명 다르게 생성
+		-DAO, DTO 만들기
+		-SignupForm, SignupPro 새로 작성
+		-List.jsp 새로작성
+
+		

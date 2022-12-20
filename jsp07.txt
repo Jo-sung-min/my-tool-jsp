@@ -1,0 +1,70 @@
+[jsp07]
+1. 회원가입
+// 1
+	#1. 회원가입 form, pro
+	#2. DB table 
+	#3 DAO, DOT
+	#4 main 페이지
+	#5 로그인 form, pro
+
+
+ 		
+// 2
+	#6 마이페이지
+		modifyForm
+		deleteForm
+		main 으로		
+
+	#7 회원정보수정 form, pro
+	1.from	getMember(id) //id 주고 정보받는 메서드 생성
+	2.pro	updateMember(member); // 데이터 베이스 연결해서 pw 바꾸는 메서드 생성
+
+
+	#8 회원탈퇴 form, pro
+	1.from	
+	2.pro	deleteMember(id,pw);// 데이터 베이스 연결해서 삭제 해주는 메서드 생성
+-------------------------------------------------------------------------------------------------------------------------
+
+	유효성 검사
+	순서대로 작성해야 alert 가 뜨는게 순서에 맞게 뜬다.
+	프로젝트가 완성됐을때 유효성검사 해주는게 좋음
+	로그인 회원가입 수정 탈퇴 다 유효성 해주기
+
+	아이디 중복확인
+	"openConfirmId(this.form)" // 현제 문저안에서 form 태그를 전송하겠다
+
+	if(inputForm.id.value == "") 자바 스크립트에서 if 문안에 
+	inputForm.id.value 이런 형태로 들어오게 되면 있으면 true 없으면 false 주는 성질이있는데	
+	평소하던데로 if(inputForm.id.value == "") 게 비교하면 value 값이 비어있으면으로 알아들음 // 잘 생각해서 적용해줌
+	
+	jsp07  폴더 : jsp ,css, img
+	web.jsp07.model 패키지 : .java
+
+<script >
+			// 유효성 검사
+			function checkField(){
+				let inputs = document.inputForm;
+				if(!inputs.id.value){//name 속성이 id인 요소의 value가 없으면 true
+					alert("아이디를 입력하세요");
+					return false;// submit의 기본 기능인 action 에 지정한 pro 페이지로 이동하는 기능을 막겠다.
+				}
+				if(!inputs.pw.value){
+					alert("비밀번호를 입력하세요");
+					return false;
+				}
+				if(!inputs.pwch.value){
+					alert("비밀번호확인란를 입력하세요");
+					return false;
+				}
+				if(!inputs.name.value){
+					alert("이름을 입력하세요");
+					return false;
+				}
+				if(inputs.pw.value!=inputs.pwch.value){
+					alert("비밀번호가 서로 다릅니다.")
+					return false;
+				}
+				
+			}
+			
+		</script>
