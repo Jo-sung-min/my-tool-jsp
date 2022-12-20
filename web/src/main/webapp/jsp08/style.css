@@ -1,0 +1,47 @@
+BODY {
+	FONT-SIZE: 9pt; COLOR: #77878F; LINE-HEIGHT: 160%; FONT-FAMILY: 맑은 고딕,verdana,tahoma; 
+	background-color: #E7F0EC;
+}
+TABLE {
+	width: 500; margin: auto; text-align: center; border: 1px solid #77878F; border-collapse: collapse; background-color: #AAB9BD;
+}
+TR {
+	FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 160%; FONT-FAMILY: 맑은 고딕,verdana,tahoma; border: 1px solid #77878F; padding: 5px;
+}
+TD {
+	FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 160%; FONT-FAMILY: 맑은 고딕,verdana,tahoma; border: 1px solid #77878F; padding: 5px;
+}
+SELECT {
+	FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 160%; FONT-FAMILY: 맑은 고딕,verdana,tahoma
+}
+DIV {
+	FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 160%; FONT-FAMILY: 맑은 고딕,verdana,tahoma
+}
+FORM {
+	FONT-SIZE: 9pt; COLOR: #fff; LINE-HEIGHT: 160%; FONT-FAMILY: 맑은 고딕,verdana,tahoma
+}
+TEXTAREA {
+	BORDER-RIGHT: 1px solid #999999; BORDER-TOP: 1px solid #999999; FONT-SIZE: 9pt; BORDER-LEFT: 1px solid #999999 ; COLOR: #77878F; BORDER-BOTTOM: 1px solid #999999; FONT-FAMILY: 맑은 고딕,verdana; BACKGROUND-COLOR: white
+}
+INPUT {
+	BORDER-RIGHT: 1px solid #999999; BORDER-TOP: 1px solid #999999; FONT-SIZE: 9pt; BORDER-LEFT: 1px solid #999999; COLOR: #77878F; BORDER-BOTTOM: 1px solid #999999; FONT-FAMILY: 맑은 고딕,verdana; HEIGHT: 19px; BACKGROUND-COLOR: #E1E8E7;
+}
+BUTTON {
+	BORDER-RIGHT: 1px solid #999999; BORDER-TOP: 1px solid #999999; FONT-SIZE: 9pt; BORDER-LEFT: 1px solid #999999; COLOR: #77878F; BORDER-BOTTOM: 1px solid #999999; FONT-FAMILY: 맑은 고딕,verdana; HEIGHT: 19px; BACKGROUND-COLOR: #E1E8E7;
+}
+
+.pageNums{
+	FONT-SIZE: 9pt; COLOR: #77878F; LINE-HEIGHT: 160%; FONT-FAMILY: 맑은 고딕,verdana,tahoma; 
+	text-decoration:none;
+}
+
+
+
+A:link:not(.pageNums) {text-decoration:none;color:#E1E8E7}
+A:hover{text-decoration:yes;color:#77878F}
+A:visited {text-decoration:none;color:#89488A}
+
+
+
+
+
